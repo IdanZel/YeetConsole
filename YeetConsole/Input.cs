@@ -43,12 +43,7 @@ public static class Input
             Console.WriteLine($"Target: {target}");
             signal.Reset();
 
-            Console.WriteLine();
-
-            PrintResults(boat, target);
-            Console.WriteLine();
-
-            restart = PromptContinue(boat, target);
+            restart = PrintResults(boat, target);
         } while (restart);
 
         signal.Dispose();
@@ -87,23 +82,47 @@ public static class Input
                 targetInput = Console.ReadLine();
             }
 
-            Console.WriteLine();
-
-            PrintResults(boat, target);
-            Console.WriteLine();
-
-            restart = PromptContinue(boat, target);
+            restart = PrintResults(boat, target);
         } while (restart);
     }
 
-    private static void PrintResults(MinecraftCoordinates boat, MinecraftCoordinates target)
+    private static bool PrintResults(MinecraftCoordinates boat, MinecraftCoordinates target)
     {
+        bool restart;
+        Console.WriteLine();
+
+        if (!InnerPrintResults(boat, target))
+        {
+            Console.WriteLine();
+            Console.WriteLine("Press Enter to restart");
+
+            Console.ReadLine();
+            restart = true;
+        }
+        else
+        {
+            Console.WriteLine();
+            restart = PromptContinue(boat, target);
+        }
+
+        return restart;
+    }
+
+    private static bool InnerPrintResults(MinecraftCoordinates boat, MinecraftCoordinates target)
+    {
+        if (!YeetCalculator.Validate(boat, target, out var warning))
+        {
+            Console.WriteLine(warning);
+            return false;
+        }
+
         Console.WriteLine($"Travel angle: {YeetCalculator.TravelAngle(boat, target):0.00}°");
 
-        var pullRodCoordinates = string.Join(Environment.NewLine,
-            YeetCalculator.AllPullRodCoordinates(boat, target).Select(pair => $"{pair.Key,-22} {pair.Value}"));
+        var pullRodCoordinates = YeetCalculator.AllPullRodCoordinates(boat, target).Format();
         Console.WriteLine("Pull rod at: ");
         Console.WriteLine(pullRodCoordinates);
+
+        return true;
     }
 
     private static bool PromptContinue(MinecraftCoordinates boat, MinecraftCoordinates target)
@@ -114,7 +133,7 @@ public static class Input
         {
             Console.WriteLine();
 
-            PrintResults(target, boat);
+            InnerPrintResults(target, boat);
             Console.WriteLine();
 
             continueOption = PromptContinueOption(true);

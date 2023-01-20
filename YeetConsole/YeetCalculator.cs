@@ -13,6 +13,47 @@ public static class YeetCalculator
         ["Blue Ice"] = 0.989
     };
 
+    public static bool Validate(MinecraftCoordinates boat, MinecraftCoordinates target, out string warning)
+    {
+        if (boat.Equals(target))
+        {
+            warning = "Boat and Target coordinates are identical";
+            return false;
+        }
+
+        var delta = target - boat;
+        var chunkDistanceX = Math.Abs(delta.ChunkX);
+        var chunkDistanceZ = Math.Abs(delta.ChunkZ);
+
+        if (chunkDistanceX < 2 && chunkDistanceZ < 2)
+        {
+            warning = "Boat and Target coordinates are too close to each other";
+            return false;
+        }
+
+        if (chunkDistanceX > 43 || chunkDistanceZ > 43)
+        {
+            // A lot of magic numbers here, would be difficult to describe the meaning of each one.
+            // The transition from the original formulas to this formula is demonstrated here:
+            // https://www.desmos.com/calculator/ecuoohnyvq
+            var maxTargetCoordinates = FrictionMap.Keys.ToDictionary(surface => surface, surface =>
+            {
+                var friction = FrictionMap[surface];
+                var maxDistanceX = friction * (Math.Sign(delta.X) * 695.5 + boat.X % 16 - 7.5);
+                var maxDistanceZ = friction * (Math.Sign(delta.Z) * 695.5 + boat.Z % 16 - 7.5);
+                return boat + new MinecraftCoordinates(maxDistanceX, maxDistanceZ);
+            });
+
+            warning = "Boat and Target coordinates are too far apart, " + Environment.NewLine + 
+                      "furthest target coordinates at this angle are: " + Environment.NewLine +
+                      maxTargetCoordinates.Format();
+            return false;
+        }
+
+        warning = string.Empty;
+        return true;
+    }
+
     public static Dictionary<string, MinecraftCoordinates> AllPullRodCoordinates(MinecraftCoordinates boat,
         MinecraftCoordinates target)
     {
@@ -34,4 +75,7 @@ public static class YeetCalculator
         var radians = baseAngle + correction;
         return radians * (180.0 / Math.PI);
     }
+
+    // furthest chunk = boat.ChunkX + sign(chunkX) * 43
+    
 }
