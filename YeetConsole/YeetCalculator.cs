@@ -31,6 +31,8 @@ public static class YeetCalculator
             return false;
         }
 
+        // TODO: Bug - chunk distance should be checked after applying friction
+        // TODO: check max distance for each surface separately
         if (chunkDistanceX > 43 || chunkDistanceZ > 43)
         {
             // A lot of magic numbers here, would be difficult to describe the meaning of each one.
