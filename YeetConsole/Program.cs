@@ -1,6 +1,6 @@
 ﻿using YeetConsole;
 
-var refreshInterval = 500;
+var refreshInterval = 100;
 var ignoreInitialText = true;
 var isManualInput = false;
 
