@@ -61,20 +61,30 @@ public static class Input
         {
             Console.Clear();
 
-            Console.WriteLine("Enter boat coordinates:");
-
             MinecraftCoordinates boat;
-            while (!InputParser.TryParseManualInput(Console.ReadLine() ?? string.Empty, out boat))
+
+            Console.WriteLine("Enter boat coordinates:");
+            var boatInput = Console.ReadLine();
+
+            while (boatInput is null ||
+                   (!InputParser.TryParseManualInput(boatInput, out boat) &&
+                    !InputParser.TryParseF3C(boatInput, out boat)))
             {
                 Console.WriteLine("Could not parse coordinates, please try again");
+                boatInput = Console.ReadLine();
             }
 
-            Console.WriteLine("Enter target coordinates:");
-
             MinecraftCoordinates target;
-            while (!InputParser.TryParseManualInput(Console.ReadLine() ?? string.Empty, out target))
+
+            Console.WriteLine("Enter target coordinates:");
+            var targetInput = Console.ReadLine();
+
+            while (targetInput is null ||
+                   (!InputParser.TryParseManualInput(targetInput, out target) &&
+                    !InputParser.TryParseF3C(targetInput, out target)))
             {
                 Console.WriteLine("Could not parse coordinates, please try again");
+                targetInput = Console.ReadLine();
             }
 
             Console.WriteLine();
