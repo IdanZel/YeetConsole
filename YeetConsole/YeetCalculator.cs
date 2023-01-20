@@ -54,16 +54,6 @@ public static class YeetCalculator
         return true;
     }
 
-    public static Dictionary<string, MinecraftCoordinates> AllPullRodCoordinates(MinecraftCoordinates boat,
-        MinecraftCoordinates target)
-    {
-        return FrictionMap.Keys.ToDictionary(surface => surface, surface =>
-        {
-            var delta = target - boat;
-            return boat + delta / FrictionMap[surface];
-        });
-    }
-
     public static double TravelAngle(MinecraftCoordinates boat, MinecraftCoordinates target)
     {
         var delta = target - boat;
@@ -76,6 +66,13 @@ public static class YeetCalculator
         return radians * (180.0 / Math.PI);
     }
 
-    // furthest chunk = boat.ChunkX + sign(chunkX) * 43
-    
+    public static Dictionary<string, MinecraftCoordinates> AllPullRodCoordinates(MinecraftCoordinates boat,
+        MinecraftCoordinates target)
+    {
+        return FrictionMap.Keys.ToDictionary(surface => surface, surface =>
+        {
+            var delta = target - boat;
+            return boat + delta / FrictionMap[surface];
+        });
+    }
 }
