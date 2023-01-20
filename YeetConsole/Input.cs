@@ -117,10 +117,15 @@ public static class Input
         }
 
         Console.WriteLine($"Travel angle: {YeetCalculator.TravelAngle(boat, target):0.00}°");
+        Console.WriteLine();
 
         var pullRodCoordinates = YeetCalculator.AllPullRodCoordinates(boat, target).Format();
         Console.WriteLine("Pull rod at: ");
         Console.WriteLine(pullRodCoordinates);
+        Console.WriteLine();
+
+        var (minRender, maxRender) = YeetCalculator.RenderDistanceRange(boat, target);
+        Console.WriteLine($"Render distance can be between {minRender} and {maxRender}");
 
         return true;
     }

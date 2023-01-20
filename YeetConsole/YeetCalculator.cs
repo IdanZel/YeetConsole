@@ -75,4 +75,18 @@ public static class YeetCalculator
             return boat + delta / FrictionMap[surface];
         });
     }
+
+    public static (int Min, int Max) RenderDistanceRange(MinecraftCoordinates boat, MinecraftCoordinates target)
+    {
+        var delta = target - boat;
+
+        var chunkDistanceX = Math.Abs(delta.ChunkX);
+        var chunkDistanceZ = Math.Abs(delta.ChunkZ);
+        var maxChunkDelta = Math.Max(chunkDistanceX, chunkDistanceZ);
+
+        // TODO: Ensure this calculation is correct
+        return maxChunkDelta < 15
+            ? (2, maxChunkDelta + 1)
+            : (maxChunkDelta - 11, Math.Min(32, maxChunkDelta + 1));
+    }
 }
