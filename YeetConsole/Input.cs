@@ -1,5 +1,6 @@
 ﻿using YeetConsole.Coordinates;
 using YeetConsole.IO;
+
 // ReSharper disable AccessToDisposedClosure
 
 namespace YeetConsole;
@@ -9,41 +10,41 @@ public static class Input
     public static void Auto(int refreshInterval, bool ignoreInitialText)
     {
         var signal = new ManualResetEventSlim();
-        
+
         bool restart;
         do
         {
             MinecraftCoordinates currentCoordinates = default;
-        
+
             using var clipboardMonitor = new ClipboardMonitor(refreshInterval, ignoreInitialText, input =>
             {
                 if (!InputParser.TryParseF3C(input, out currentCoordinates))
                 {
                     return;
                 }
-        
+
                 signal.Set();
             });
-        
+
             Console.Clear();
-        
+
             Console.WriteLine("Waiting for boat coordinates...");
-        
+
             signal.Wait();
-        
+
             var boat = currentCoordinates;
             Console.WriteLine($"Boat: {boat}");
             signal.Reset();
-        
+
             Console.WriteLine("Waiting for target coordinates...");
             signal.Wait();
-        
+
             var target = currentCoordinates;
             Console.WriteLine($"Target: {target}");
             signal.Reset();
-        
+
             Console.WriteLine();
-        
+
             PrintResults(boat, target);
             Console.WriteLine();
 
@@ -59,7 +60,7 @@ public static class Input
         do
         {
             Console.Clear();
-        
+
             Console.WriteLine("Enter boat coordinates:");
 
             MinecraftCoordinates boat;
@@ -67,7 +68,7 @@ public static class Input
             {
                 Console.WriteLine("Could not parse coordinates, please try again");
             }
-        
+
             Console.WriteLine("Enter target coordinates:");
 
             MinecraftCoordinates target;
@@ -75,9 +76,9 @@ public static class Input
             {
                 Console.WriteLine("Could not parse coordinates, please try again");
             }
-        
+
             Console.WriteLine();
-        
+
             PrintResults(boat, target);
             Console.WriteLine();
 
