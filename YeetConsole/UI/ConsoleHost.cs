@@ -15,6 +15,8 @@ public static class ConsoleHost
         bool restart;
         do
         {
+            signal.Reset();
+
             MinecraftCoordinates currentCoordinates = default;
 
             using var clipboardMonitor = new ClipboardMonitor(refreshInterval, ignoreInitialText, input =>
@@ -35,6 +37,7 @@ public static class ConsoleHost
 
             var boat = currentCoordinates;
             Console.WriteLine($"Boat: {boat}");
+
             signal.Reset();
 
             Console.WriteLine("Waiting for target coordinates...");
@@ -42,7 +45,6 @@ public static class ConsoleHost
 
             var target = currentCoordinates;
             Console.WriteLine($"Target: {target}");
-            signal.Reset();
 
             restart = PrintResults(boat, target);
         } while (restart);
