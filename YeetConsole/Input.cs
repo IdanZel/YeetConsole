@@ -110,22 +110,39 @@ public static class Input
 
     private static bool InnerPrintResults(MinecraftCoordinates boat, MinecraftCoordinates target)
     {
-        if (!YeetCalculator.Validate(boat, target, out var warning))
+        var calculation = new YeetCalculation(boat, target);
+        if (calculation.AreCoordinatesIdentical())
         {
-            Console.WriteLine(warning);
+            Console.WriteLine("Boat and Target coordinates are identical");
             return false;
         }
 
-        Console.WriteLine($"Travel angle: {YeetCalculator.TravelAngle(boat, target):0.00}°");
+        Console.WriteLine($"Travel angle: {calculation.GetTravelAngle():0.00}°");
         Console.WriteLine();
 
-        var pullRodCoordinates = YeetCalculator.AllPullRodCoordinates(boat, target).Format();
-        Console.WriteLine("Pull rod at: ");
+        var pullRodCoordinates = string.Join(Environment.NewLine,
+            calculation.GetAllPullRodCoordinates().Select(pair =>
+            {
+                var (surface, coordinates) = pair;
+                var result = coordinates.Warning switch
+                {
+                    TravelDistanceWarning.TooClose => "Target is too close",
+
+                    TravelDistanceWarning.TooFar => "Target is too far, furthest coordinates at this angle are: " +
+                                                    coordinates.Coordinates,
+
+                    TravelDistanceWarning.None or _ =>
+                        $"{coordinates.Coordinates} in chunk {coordinates.Coordinates.Chunk}" +
+                        Environment.NewLine + $"{string.Empty,-23}" +
+                        $"Render distance can be between {coordinates.RenderDistanceRange?.Min} " +
+                        $"and {coordinates.RenderDistanceRange?.Max}"
+                };
+
+                return $"{surface,-23}{result}" + Environment.NewLine;
+            }));
+
         Console.WriteLine(pullRodCoordinates);
         Console.WriteLine();
-
-        var (minRender, maxRender) = YeetCalculator.RenderDistanceRange(boat, target);
-        Console.WriteLine($"Render distance can be between {minRender} and {maxRender}");
 
         return true;
     }
