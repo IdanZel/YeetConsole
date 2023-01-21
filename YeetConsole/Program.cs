@@ -1,4 +1,4 @@
-﻿using YeetConsole;
+﻿using YeetConsole.UI;
 
 var refreshInterval = 100;
 var ignoreInitialText = true;
@@ -13,9 +13,9 @@ if (args.Length == 3)
 
 if (isManualInput)
 {
-    Input.Manual();
+    ConsoleHost.Manual();
 }
 else
 {
-    Input.Auto(refreshInterval, ignoreInitialText);
+    ConsoleHost.Auto(refreshInterval, ignoreInitialText);
 }

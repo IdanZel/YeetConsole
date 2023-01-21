@@ -1,6 +1,6 @@
 ﻿using YeetConsole.Coordinates;
 
-namespace YeetConsole;
+namespace YeetConsole.Calculations;
 
 public class YeetCalculation
 {

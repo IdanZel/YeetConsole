@@ -1,11 +1,12 @@
-﻿using YeetConsole.Coordinates;
+﻿using YeetConsole.Calculations;
+using YeetConsole.Coordinates;
 using YeetConsole.IO;
 
 // ReSharper disable AccessToDisposedClosure
 
-namespace YeetConsole;
+namespace YeetConsole.UI;
 
-public static class Input
+public static class ConsoleHost
 {
     public static void Auto(int refreshInterval, bool ignoreInitialText)
     {

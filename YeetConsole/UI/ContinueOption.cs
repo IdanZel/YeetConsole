@@ -1,4 +1,4 @@
-namespace YeetConsole;
+namespace YeetConsole.UI;
 
 public enum ContinueOption
 {
