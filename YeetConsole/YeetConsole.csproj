@@ -5,13 +5,16 @@
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
         <PublishSingleFile>True</PublishSingleFile>
         <PublishSelfContained>True</PublishSelfContained>
         <PublishTrimmed>True</PublishTrimmed>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="TextCopy" Version="6.2.1" />
+        <PackageReference Include="TextCopy" Version="6.2.1"/>
     </ItemGroup>
 
 </Project>
