@@ -45,7 +45,9 @@ public class YeetCalculation
     {
         var friction = FrictionMap[surface];
         var travelDistance = Delta / friction;
-        var chunkDistance = travelDistance.Chunk.Abs();
+        var pullRodCoordinates = _boat + travelDistance;
+
+        var chunkDistance = _boat.Chunk.DistanceTo(pullRodCoordinates.Chunk);
 
         switch (chunkDistance)
         {
@@ -57,17 +59,16 @@ public class YeetCalculation
         }
 
         var renderDistanceRange = GetRenderDistanceRange(chunkDistance);
-        return new PullRodCoordinates(_boat + travelDistance, TravelDistanceWarning.None, renderDistanceRange);
+        return new PullRodCoordinates(pullRodCoordinates, TravelDistanceWarning.None, renderDistanceRange);
     }
 
     private MinecraftCoordinates GetMaxTargetCoordinates(double friction)
     {
-        // TODO: Ensure this calculation is correct
         // A lot of magic numbers here, would be difficult to describe the meaning of each one.
         // The transition from the original formulas to this formula is demonstrated here:
         // https://www.desmos.com/calculator/ecuoohnyvq
-        var maxDistanceX = friction * (Math.Sign(Delta.X) * 695.5 + _boat.X % 16 - 7.5);
-        var maxDistanceZ = friction * (Math.Sign(Delta.Z) * 695.5 + _boat.Z % 16 - 7.5);
+        var maxDistanceX = friction * (Math.Sign(Delta.X) * 695.5 + 7.5 - _boat.X % 16);
+        var maxDistanceZ = friction * (Math.Sign(Delta.Z) * 695.5 + 7.5 - _boat.Z % 16);
 
         return _boat + new MinecraftCoordinates(maxDistanceX, maxDistanceZ);
     }
@@ -76,10 +77,7 @@ public class YeetCalculation
     {
         var maxChunkDistance = Math.Max(chunkDistance.X, chunkDistance.Z);
 
-        // TODO: Ensure this calculation is correct
-        return maxChunkDistance < 15
-            ? (2, maxChunkDistance + 1)
-            : (maxChunkDistance - 11, Math.Min(32, maxChunkDistance + 1));
+        return (maxChunkDistance < 15 ? 2 : maxChunkDistance - 11, Math.Min(32, maxChunkDistance + 1));
     }
 }
 

@@ -21,7 +21,7 @@ public readonly record struct MinecraftCoordinates(double X, double Z)
 
 public readonly record struct ChunkCoordinates(int X, int Z)
 {
-    public ChunkCoordinates Abs() => new(Math.Abs(X), Math.Abs(Z));
+    public ChunkCoordinates DistanceTo(ChunkCoordinates target) => new(Math.Abs(target.X - X), Math.Abs(target.Z - Z));
 
     public override string ToString() => $"({X}, {Z})";
 }
