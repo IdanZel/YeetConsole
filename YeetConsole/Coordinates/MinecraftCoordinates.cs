@@ -21,6 +21,8 @@ public readonly record struct MinecraftCoordinates(double X, double Z)
 
 public readonly record struct ChunkCoordinates(int X, int Z)
 {
+    public ChunkCoordinates Abs() => new(Math.Abs(X), Math.Abs(Z));
+
     public override string ToString() => $"({X}, {Z})";
 }
 
@@ -32,4 +34,4 @@ public enum TravelDistanceWarning
 }
 
 public readonly record struct PullRodCoordinates(MinecraftCoordinates Coordinates, TravelDistanceWarning Warning,
-    int MinRenderDistance = 0, int MaxRenderDistance = 0);
+    (int Min, int Max)? RenderDistanceRange = null);

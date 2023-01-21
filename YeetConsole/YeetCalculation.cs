@@ -45,7 +45,7 @@ public class YeetCalculation
     {
         var friction = FrictionMap[surface];
         var travelDistance = Delta / friction;
-        var chunkDistance = travelDistance.Chunk;
+        var chunkDistance = travelDistance.Chunk.Abs();
 
         switch (chunkDistance)
         {
@@ -56,12 +56,13 @@ public class YeetCalculation
                 return new PullRodCoordinates(GetMaxTargetCoordinates(friction), TravelDistanceWarning.TooFar);
         }
 
-        var (minRender, maxRender) = GetRenderDistanceRange(chunkDistance);
-        return new PullRodCoordinates(_boat + travelDistance, TravelDistanceWarning.None, minRender, maxRender);
+        var renderDistanceRange = GetRenderDistanceRange(chunkDistance);
+        return new PullRodCoordinates(_boat + travelDistance, TravelDistanceWarning.None, renderDistanceRange);
     }
 
     private MinecraftCoordinates GetMaxTargetCoordinates(double friction)
     {
+        // TODO: Ensure this calculation is correct
         // A lot of magic numbers here, would be difficult to describe the meaning of each one.
         // The transition from the original formulas to this formula is demonstrated here:
         // https://www.desmos.com/calculator/ecuoohnyvq
