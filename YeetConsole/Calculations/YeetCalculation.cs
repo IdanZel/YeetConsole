@@ -77,7 +77,7 @@ public class YeetCalculation
     {
         var maxChunkDistance = Math.Max(chunkDistance.X, chunkDistance.Z);
 
-        return (maxChunkDistance < 15 ? 2 : maxChunkDistance - 11, Math.Min(32, maxChunkDistance + 1));
+        return (Math.Max(2, maxChunkDistance - 11), Math.Min(32, maxChunkDistance + 1));
     }
 }
 
